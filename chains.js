@@ -18,6 +18,8 @@ async function syncChainMetaData() {
     const p = await Promise.allSettled(
       chains.map((chain) => getMetaData(chain)),
     );
+
+    // Now form the metadata into an array to pass to the database
     let dbJSON = [];
     p.forEach((el) => {
       if(el.status === 'fulfilled')
@@ -34,6 +36,8 @@ async function syncChainMetaData() {
         ts:ts,
       });
     });
+
+    // Pass to database
     await setChainMetadata(dbJSON)
   } catch (err) {
     console.error(">>> root level error catch");
